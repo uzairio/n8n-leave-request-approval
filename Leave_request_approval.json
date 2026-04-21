@@ -1,0 +1,499 @@
+{
+  "name": "Leave request approval",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Leave",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Start date",
+              "fieldType": "date"
+            },
+            {
+              "fieldLabel": "End date",
+              "fieldType": "date"
+            },
+            {
+              "fieldLabel": "Reason"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -192,
+        96
+      ],
+      "id": "623d8f4c-30c3-4c60-9d8a-ab862dda0827",
+      "name": "On form submission",
+      "webhookId": "6215bf73-fcea-47ef-89b8-a9684932eaff"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs",
+          "mode": "list",
+          "cachedResultName": "Leave tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.Email }}",
+            "Employee Name": "={{ $json.Name }}",
+            "Start Date": "={{ $json['Start date'] }}",
+            "End Date": "={{ $json['End date'] }}",
+            "Status": "={{ $json.Reason }}",
+            "Request ID": "={{ $workflow.id }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Employee Name",
+              "displayName": "Employee Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Start Date",
+              "displayName": "Start Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "End Date",
+              "displayName": "End Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Request ID",
+              "displayName": "Request ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Start date",
+              "displayName": "Start date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "End date",
+              "displayName": "End date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        -112
+      ],
+      "id": "da309e4b-f70c-4725-bbbc-56bc0c81019c",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "764kggLuyBv2M7RO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data     = $input.first().json;\nconst newStart = new Date(data['Start date']);\nconst newEnd   = new Date(data['End date']);\nconst employee = data['Name'];\nconst rows     = $('Read leave tracker').all();\n\nconst hasClash = rows.some(row => {\n  if (!row.json['Employee Name'] || !row.json['Start Date']) return false;\n  const samePerson   = row.json['Employee Name'] === employee;\n  const exStart      = new Date(row.json['Start Date']);\n  const exEnd        = new Date(row.json['End Date']);\n  const datesOverlap = newStart < exEnd && newEnd > exStart;\n  return samePerson && datesOverlap;\n});\n\nreturn [{ json: { clash: hasClash } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -112
+      ],
+      "id": "0686891c-9231-4281-b068-c3a0abe21dcd",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs",
+          "mode": "list",
+          "cachedResultName": "Leave tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M5t0jNMvy2jQqxTHcTS5t5hZ89Bl4DSyc2lfnm9fyBs/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        96
+      ],
+      "id": "7ab921d8-1c3f-4fb9-ade7-3592362cc917",
+      "name": "Read leave tracker",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "764kggLuyBv2M7RO",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0416a984-34d1-4324-9d42-75afd3e3d35a",
+              "leftValue": "={{ $json.clash }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        96
+      ],
+      "id": "d2897f23-6bd3-4d1f-b077-1fd9f36bf33a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a helpful assistant that combines the following items into a form that emails the manager to know which emplyee is asking for the leave into a clean readable format with every line starting from a new one...\n\n{{ $('On form submission').item.json.Name }}\n{{ $('On form submission').item.json.Email }}\n{{ $('On form submission').item.json['Start date'] }}\n{{ $('On form submission').item.json['End date'] }}\n{{ $('On form submission').item.json.Reason }}\n{{ $('On form submission').item.json.submittedAt }}\n\nwrite everything on a new line...",
+        "options": {
+          "systemMessage": "=You are a helpful assistant that combines the following items into a form that emails the manager to know which emplyee is asking for the leave into a clean readable format with every line starting from a new one...\n\n{{ $('On form submission').item.json.Name }}\n{{ $('On form submission').item.json.Email }}\n{{ $('On form submission').item.json['Start date'] }}\n{{ $('On form submission').item.json['End date'] }}\n{{ $('On form submission').item.json.Reason }}\n{{ $('On form submission').item.json.submittedAt }}\n\nwrite everything on a new line..."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        784,
+        96
+      ],
+      "id": "1159ca1e-3614-4a0f-85b6-b9d8e099e299",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        784,
+        272
+      ],
+      "id": "b6990d0b-6896-44a8-8a5a-9fd21547c91c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "I7f8zxgw1XhtMVWq",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Disapproval",
+        "message": "=the dates  {{ $('On form submission').item.json['Start date'] }} are unavailable...",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        784,
+        -112
+      ],
+      "id": "dd9f7ea4-663f-43c9-b728-b1ebb8dd1195",
+      "name": "Clash notification",
+      "webhookId": "712b9e0a-b980-410e-a297-577029da64e0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WXmTBKbzpiSooxXX",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "m.uzair9955@gmail.com",
+        "subject": "Leave request",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1088,
+        96
+      ],
+      "id": "3eff9e02-7f82-47e2-b1c4-11879c082b8b",
+      "name": "Approval request",
+      "webhookId": "1ffbc66f-5233-40da-88f0-802ed5c3701c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WXmTBKbzpiSooxXX",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Read leave tracker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read leave tracker": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Clash notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Approval request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Uzair",
+          "Email": "umzairrr@gmail.com",
+          "Start date": "2026-11-11",
+          "End date": "2026-02-12",
+          "Reason": "emergeny",
+          "submittedAt": "2026-04-03T09:32:46.551+05:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Code in JavaScript": [
+      {
+        "json": {
+          "clash": false
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
