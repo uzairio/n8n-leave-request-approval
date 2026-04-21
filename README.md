@@ -16,10 +16,13 @@ Automated staff leave request system built in n8n.
 - Gmail
 
 ## Workflow preview
-![Workflow](workflow-preview.png)
+![Workflow](Leave-request-approval.png)
 
 ## How to use
-1. Import `leave-request-approval.json` into n8n
+1. Import `Leave_request_approval.json` into n8n
 2. Connect your Google and Gmail credentials
 3. Update the sheet ID and email addresses
 4. Activate the workflow
+
+## Status
+This project is a work in progress and is being improved step by step.
